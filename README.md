@@ -9,38 +9,54 @@ composer require koka/flash:dev-master
 2) Подключить библиотеку глобально для всех бандлов
 ```php
 // /src/Project/Framework/Builder.php
-    protected function buildFlash()
+    protected function buildComponents()
     {
-        $http = $this->components()->http();
-        $container = $http->contextContainer($http->context($http->request()));
-        return new \Koka\Flash\Messages($container);
+        return new Components($this);
     }
+```
+```php
+// /src/Project/Framework/Components.php
+   
+namespace Project\Framework;
+
+class Components extends \PHPixie\BundleFramework\Components
+{
     public function flash()
     {
         return $this->instance('flash');
     }
+
+    protected function buildFlash()
+    {
+        $http = $this->http();
+        $container = $http->contextContainer($http->context($http->request()));
+        return new \Koka\Flash\Messages($container);
+    }
+}
 ```
 
 ### Использование
 ```php
 	// /bundles/app/src/Project/App/HTTPProcessor.php
-	namespace Project\App;
+	
+namespace Project\App;
 
-	class HTTPProcessor extends \PHPixie\DefaultBundle\Processor\HTTP\Builder
-	{
-	    protected $builder;
-	    protected $attribute = 'processor';
-	    
-	    public function __construct($builder)
-	    {
-	        $this->builder = $builder;
-	    }
-	    
-	    protected function buildGreetProcessor()
-	    {
-	        return new HTTPProcessors\Greet($this->builder);
-	    }
-	}
+class HTTPProcessor extends \PHPixie\DefaultBundle\Processor\HTTP\Builder
+{
+    protected $builder;
+    protected $attribute = 'processor';
+
+    public function __construct($builder)
+    {
+        $this->builder = $builder;
+    }
+
+    protected function buildGreetProcessor()
+    {
+        return new HTTPProcessors\Greet($this->builder->components());
+    }
+}
+
 ```
 ```php
 	// /bundles/app/src/Project/App/HTTPProcessors/Greet.php
@@ -51,12 +67,13 @@ class Greet extends \PHPixie\DefaultBundle\Processor\HTTP\Actions
 {
     protected $template;
     protected $flash;
-    public function __construct($builder)
+
+    public function __construct($components)
     {
-        $this->template = $builder->components()->template();
-        $this->flash    = $builder->frameworkBuilder()->flash();
+        $this->template = $components->template();
+        $this->flash    = $components->flash();
     }
-    
+
     public function defaultAction($request)
     {
         // add test info message
