@@ -6,6 +6,11 @@ use PHPixie\HTTP\Context\Container;
 
 /**
  * Class Messages
+ * @method void error(string $message)
+ * @method void warning(string $message)
+ * @method void notice(string $message)
+ * @method void info(string $message)
+ * @method void success(string $message)
  * @package Koka\Flash
  */
 class Messages extends Type
