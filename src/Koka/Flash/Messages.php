@@ -13,8 +13,13 @@ use PHPixie\HTTP\Context\Container;
  * @method void success(string $message)
  * @package Koka\Flash
  */
-class Messages extends Type
+class Messages extends Type implements \Iterator
 {
+
+    /**
+     * @var array copy of all messages for Iterator
+     */
+    private $_array = [];
 
     /**
      * @var Container
@@ -133,12 +138,60 @@ class Messages extends Type
     }
 
     /**
-     * @param int|string $type
+     * @param string $type
      * @param array $args
      */
     public function __call($type, $args)
     {
         !in_array($type, ['error', 'warning', 'notice', 'info', 'success'])
             ?: $this->push($type, $args[0], true);
+    }
+
+    /**
+     * @return Message
+     */
+    public function current()
+    {
+        return current($this->_array);
+    }
+
+    /**
+     * @return Message
+     */
+    public function next()
+    {
+        return next($this->_array);
+    }
+
+    /**
+     * @return int
+     */
+    public function key()
+    {
+        return key($this->_array);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function valid()
+    {
+        if ($this->key() !== null) {
+            return true;
+        } else {
+            $this->_array = [];
+            return false;
+        }
+    }
+
+    /**
+     * @return Message
+     */
+    public function rewind()
+    {
+        if ($this->hasMessages()) {
+            $this->_array = $this->popAll();
+            return reset($this->_array);
+        }
     }
 }

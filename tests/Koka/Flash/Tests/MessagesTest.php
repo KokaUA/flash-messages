@@ -131,4 +131,45 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
         $this->messages->notice('notice message');
         $this->assertCount(2, $this->messages->popAll());
     }
+
+    public function testCurrent()
+    {
+        $this->assertFalse($this->messages->current());
+        $this->messages->notice('notice message');
+        $this->messages->rewind();
+        $this->assertInstanceOf('Koka\Flash\Message', $this->messages->current());
+    }
+
+    public function testNext()
+    {
+        $this->messages->notice('notice message');
+        $this->messages->notice('notice message');
+        $this->messages->rewind();
+        $this->assertInstanceOf('Koka\Flash\Message', $this->messages->next());
+        $this->assertFalse($this->messages->next());
+    }
+
+    public function testKey()
+    {
+        $this->assertNull($this->messages->key());
+        $this->messages->notice('notice message');
+        $this->messages->rewind();
+        $this->assertSame($this->messages->key(), 0);
+    }
+
+    public function testValid()
+    {
+        $this->assertFalse($this->messages->valid());
+        $this->messages->notice('notice message');
+        $this->messages->rewind();
+        $this->assertTrue($this->messages->valid());
+    }
+
+    public function testRewind()
+    {
+        $this->assertFalse($this->messages->valid());
+        $this->messages->notice('notice message');
+        $this->messages->rewind();
+        $this->assertTrue($this->messages->valid());
+    }
 }

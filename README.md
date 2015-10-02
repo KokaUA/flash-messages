@@ -28,9 +28,7 @@ class Components extends \PHPixie\BundleFramework\Components
 
     protected function buildFlash()
     {
-        $http = $this->http();
-        $container = $http->contextContainer($http->context($http->request()));
-        return new \Koka\Flash\Messages($container);
+        return new \Koka\Flash\Messages($this->builder->context());
     }
 }
 ```
@@ -96,14 +94,11 @@ class Greet extends \PHPixie\DefaultBundle\Processor\HTTP\Actions
 	</head>
 	<body>
 	       <h1>PHPixie 3.0</h1>
-		<?php
-		if ($flash->hasMessages()) {
-			$messages = $flash->popAll();
-			foreach ($messages as $msg) {
-				echo "<p>type:{$msg->getType()}<br> message: {$msg}</p>";
-			}
-		}
-		?>
+		   <div class="row">
+        <?php foreach ($flash as $msg):?>
+                <div class="alert alert-<?=$msg->getType()?>" role='alert'><?=$_($msg)?></div>
+        <?php endforeach;?>
+            </div>
 		<?php $this->childContent();?>
 	</body>
 	</html>

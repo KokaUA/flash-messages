@@ -14,8 +14,6 @@ $messages = new Messages($container);
 
 $messages->notice('test notice');
 
-$msg = $messages->popAll();
-
-foreach ($msg as $m) {
-    echo "{$m->getType()}: {$m} <br />";
+foreach ($messages as $msg) {
+    echo "<div class='alert alert-{$msg->getType()}' role='alert'>{$msg}</div>";
 }
