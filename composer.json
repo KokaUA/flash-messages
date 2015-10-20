@@ -24,8 +24,8 @@
     },
     "require": {
         "php": ">=5.4.0",
-        "phpixie/slice": "3.*-dev",
-        "phpixie/http":  "3.*-dev"
+        "phpixie/slice": "~3.0",
+        "phpixie/http":  "~3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "4.7.7"
