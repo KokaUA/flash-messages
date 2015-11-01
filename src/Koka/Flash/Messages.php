@@ -19,7 +19,7 @@ class Messages extends Type implements \Iterator
     /**
      * @var array copy of all messages for Iterator
      */
-    private $_array = [];
+    protected $MessagesCopy = [];
 
     /**
      * @var Container
@@ -104,14 +104,14 @@ class Messages extends Type implements \Iterator
         if ($type && is_int($type) && isset($messages[$type])) {
             foreach ($messages[$type] as $key => $message) {
                 $allMessages[] = $message;
-                unset ($messages[$type][$key]);
+                unset($messages[$type][$key]);
             }
         } elseif ($type && is_array($type)) {
             foreach ($type as $subType) {
                 if (isset($messages[$subType])) {
                     foreach ($messages[$subType] as $key => $message) {
                         $allMessages[] = $message;
-                        unset ($messages[$subType][$key]);
+                        unset($messages[$subType][$key]);
                     }
                 }
             }
@@ -119,7 +119,7 @@ class Messages extends Type implements \Iterator
             foreach ($messages as $type => $array) {
                 foreach ($messages[$type] as $key => $message) {
                     $allMessages[] = $message;
-                    unset ($messages[$type][$key]);
+                    unset($messages[$type][$key]);
                 }
             }
         }
@@ -152,7 +152,7 @@ class Messages extends Type implements \Iterator
      */
     public function current()
     {
-        return current($this->_array);
+        return current($this->MessagesCopy);
     }
 
     /**
@@ -160,7 +160,7 @@ class Messages extends Type implements \Iterator
      */
     public function next()
     {
-        return next($this->_array);
+        return next($this->MessagesCopy);
     }
 
     /**
@@ -168,7 +168,7 @@ class Messages extends Type implements \Iterator
      */
     public function key()
     {
-        return key($this->_array);
+        return key($this->MessagesCopy);
     }
 
     /**
@@ -179,7 +179,7 @@ class Messages extends Type implements \Iterator
         if ($this->key() !== null) {
             return true;
         } else {
-            $this->_array = [];
+            $this->MessagesCopy = [];
             return false;
         }
     }
@@ -190,8 +190,8 @@ class Messages extends Type implements \Iterator
     public function rewind()
     {
         if ($this->hasMessages()) {
-            $this->_array = $this->popAll();
-            return reset($this->_array);
+            $this->MessagesCopy = $this->popAll();
         }
+        return reset($this->MessagesCopy);
     }
 }
