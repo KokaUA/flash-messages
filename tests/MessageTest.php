@@ -3,15 +3,11 @@
 namespace Koka\Flash\Tests;
 
 use Koka\Flash\Message;
+use PHPixie\Test\Testcase;
 
-class MessageTest extends \PHPUnit_Framework_TestCase
+class MessageTest extends Testcase
 {
     protected $msg;
-
-    protected function setUp()
-    {
-        $this->msg = new Message(Message::INFO, 'Info message');
-    }
 
     public function testMessageInstance()
     {
@@ -30,11 +26,8 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(Message::INFO, $this->msg->getType(true));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testBadType()
+    protected function setUp()
     {
-        $msg = new Message('err', 'bad type', true);
+        $this->msg = new Message(Message::INFO, 'Info message');
     }
 }

@@ -1,19 +1,24 @@
 <?php
-require_once(__DIR__.'/../vendor/autoload.php');
+require_once(__DIR__ . '/../vendor/autoload.php');
 
 use PHPixie\Slice;
 use PHPixie\HTTP;
-use Koka\Flash\Messages;
-
+use Koka\Flash\Flash;
 
 $slice = new \PHPixie\Slice();
 $http = new \PHPixie\HTTP($slice);
 $container = $http->contextContainer($http->context($http->request()));
 
-$messages = new Messages($container);
+$flash = new Flash($container);
 
-$messages->notice('test notice');
+var_dump($flash->has());
 
-foreach ($messages as $msg) {
-    echo "<div class='alert alert-{$msg->getType()}' role='alert'>{$msg}</div>";
+$flash->info('Test info message');
+
+var_dump($flash->has());
+
+foreach ($flash as $msg) {
+    echo "Type: {$msg->getType()} message: {$msg->getMessage()}";
 }
+
+var_dump($flash->has());

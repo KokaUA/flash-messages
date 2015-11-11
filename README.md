@@ -28,7 +28,7 @@ class Components extends \PHPixie\BundleFramework\Components
 
     protected function buildFlash()
     {
-        return new \Koka\Flash\Messages($this->builder->context());
+        return new \Koka\Flash\Flash($this->builder->context());
     }
 }
 ```
@@ -51,7 +51,7 @@ class HTTPProcessor extends \PHPixie\DefaultBundle\Processor\HTTP\Builder
 
     protected function buildGreetProcessor()
     {
-        return new HTTPProcessors\Greet($this->builder->components());
+        return new HTTPProcessors\Greet($this->builder);
     }
 }
 
@@ -66,10 +66,10 @@ class Greet extends \PHPixie\DefaultBundle\Processor\HTTP\Actions
     protected $template;
     protected $flash;
 
-    public function __construct($components)
+    public function __construct($builder)
     {
-        $this->template = $components->template();
-        $this->flash    = $components->flash();
+        $this->template = $builder->components->template();
+        $this->flash    = $builder->components->flash();
     }
 
     public function defaultAction($request)

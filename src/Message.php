@@ -2,24 +2,51 @@
 
 namespace Koka\Flash;
 
-use RuntimeException;
-
 /**
  * Class Message
  * @package Koka\Flash
  */
-class Message extends Type
+class Message
 {
+    /**
+     * @const
+     */
+    const ERROR = 10;
+    /**
+     * @const
+     */
+    const DANGER = 20;
+
+    /**
+     * @const
+     */
+    const WARNING = 30;
+
+    /**
+     * @const
+     */
+    const NOTICE = 40;
+
+    /**
+     * @const
+     */
+    const INFO = 50;
+
+    /**
+     * @const
+     */
+    const SUCCESS = 60;
 
     /**
      * @var array
      */
     protected $types = [
         'error' => 10,
-        'warning' => 20,
-        'notice' => 30,
-        'info' => 40,
-        'success' => 50
+        'danger' => 20,
+        'warning' => 30,
+        'notice' => 40,
+        'info' => 50,
+        'success' => 60
     ];
 
     /**
@@ -35,18 +62,9 @@ class Message extends Type
     /**
      * @param int|string $type
      * @param string $message
-     * @param bool $typeAsString
-     * @throws RuntimeException
      */
-    public function __construct($type, $message, $typeAsString = false)
+    public function __construct($type, $message)
     {
-        if ($typeAsString) {
-            if (array_key_exists($type, $this->types)) {
-                $type = $this->types[$type];
-            } else {
-                throw new RuntimeException('Invalid type for messages {$type}');
-            }
-        }
         $this->type = $type;
         $this->text = $message;
     }
@@ -73,6 +91,9 @@ class Message extends Type
      */
     public function getType($asInt = false)
     {
-        return $asInt? $this->type: array_search($this->type, $this->types);
+        if ($asInt) {
+            return $this->type;
+        }
+        return array_search($this->type, $this->types);
     }
 }
