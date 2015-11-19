@@ -30,6 +30,11 @@ class Message
     /**
      * @const
      */
+    const ALERT = 40;
+
+    /**
+     * @const
+     */
     const INFO = 50;
 
     /**
@@ -45,6 +50,7 @@ class Message
         'danger' => 20,
         'warning' => 30,
         'notice' => 40,
+        'alert' => 45,
         'info' => 50,
         'success' => 60
     ];

@@ -46,6 +46,13 @@ class FlashTest extends Testcase
         $this->asserttrue($this->flash->has());
     }
 
+    public function testPushAlertMessage()
+    {
+        $this->assertFalse($this->flash->has());
+        $this->flash->alert('Test notice message');
+        $this->asserttrue($this->flash->has());
+    }
+
     public function testPushInfoMessage()
     {
         $this->assertFalse($this->flash->has());

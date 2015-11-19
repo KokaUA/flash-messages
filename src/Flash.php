@@ -111,6 +111,16 @@ class Flash extends Container implements FlashInterface
      * @param string $message
      * @return $this
      */
+    public function alert($message)
+    {
+        $this->push(Message::ALERT, $message);
+        return $this;
+    }
+
+    /**
+     * @param string $message
+     * @return $this
+     */
     public function info($message)
     {
         $this->push(Message::INFO, $message);

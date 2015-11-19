@@ -47,6 +47,12 @@ interface FlashInterface
      * @param  string $message
      * @return $this
      */
+    public function alert($message);
+
+    /**
+     * @param  string $message
+     * @return $this
+     */
     public function info($message);
 
     /**
