@@ -62,7 +62,7 @@ class Flash extends Container implements FlashInterface
     protected function push($type, $message)
     {
         $messages = $this->get();
-        $message = new Message($type, $message);
+        $message = new Message($this->types, $type, $message);
         $messages[$message->getType(true)][] = $message;
         $this->set($messages);
     }
@@ -73,7 +73,7 @@ class Flash extends Container implements FlashInterface
      */
     public function error($message)
     {
-        $this->push(Message::ERROR, $message);
+        $this->push('error', $message);
         return $this;
     }
 
@@ -83,7 +83,7 @@ class Flash extends Container implements FlashInterface
      */
     public function danger($message)
     {
-        $this->push(Message::DANGER, $message);
+        $this->push('danger', $message);
         return $this;
     }
 
@@ -93,7 +93,7 @@ class Flash extends Container implements FlashInterface
      */
     public function warning($message)
     {
-        $this->push(Message::WARNING, $message);
+        $this->push('warning', $message);
         return $this;
     }
 
@@ -103,7 +103,7 @@ class Flash extends Container implements FlashInterface
      */
     public function notice($message)
     {
-        $this->push(Message::NOTICE, $message);
+        $this->push('notice', $message);
         return $this;
     }
 
@@ -113,7 +113,7 @@ class Flash extends Container implements FlashInterface
      */
     public function alert($message)
     {
-        $this->push(Message::ALERT, $message);
+        $this->push('alert', $message);
         return $this;
     }
 
@@ -123,7 +123,7 @@ class Flash extends Container implements FlashInterface
      */
     public function info($message)
     {
-        $this->push(Message::INFO, $message);
+        $this->push('info', $message);
         return $this;
     }
 
@@ -133,7 +133,7 @@ class Flash extends Container implements FlashInterface
      */
     public function success($message)
     {
-        $this->push(Message::SUCCESS, $message);
+        $this->push('success', $message);
         return $this;
     }
 }

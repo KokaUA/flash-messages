@@ -9,50 +9,16 @@ namespace Koka\Flash;
 class Message
 {
     /**
-     * @const
-     */
-    const ERROR = 10;
-    /**
-     * @const
-     */
-    const DANGER = 20;
-
-    /**
-     * @const
-     */
-    const WARNING = 30;
-
-    /**
-     * @const
-     */
-    const NOTICE = 40;
-
-    /**
-     * @const
-     */
-    const ALERT = 40;
-
-    /**
-     * @const
-     */
-    const INFO = 50;
-
-    /**
-     * @const
-     */
-    const SUCCESS = 60;
-
-    /**
      * @var array
      */
     protected $types = [
-        'error' => 10,
-        'danger' => 20,
-        'warning' => 30,
-        'notice' => 40,
-        'alert' => 45,
-        'info' => 50,
-        'success' => 60
+        'error' => 'error',
+        'danger' => 'danger',
+        'warning' => 'warning',
+        'notice' => 'notice',
+        'alert' => 'alert',
+        'info' => 'info',
+        'success' => 'success'
     ];
 
     /**
@@ -66,11 +32,13 @@ class Message
     protected $text;
 
     /**
+     * @param array $types
      * @param int|string $type
      * @param string $message
      */
-    public function __construct($type, $message)
+    public function __construct($types, $type, $message)
     {
+        $this->types = array_merge($this->types, $types);
         $this->type = $type;
         $this->text = $message;
     }
@@ -92,14 +60,14 @@ class Message
     }
 
     /**
-     * @param bool $asInt
+     * @param bool $asCode
      * @return int|string
      */
-    public function getType($asInt = false)
+    public function getType($asCode = false)
     {
-        if ($asInt) {
+        if ($asCode) {
             return $this->type;
         }
-        return array_search($this->type, $this->types);
+        return $this->types[$this->type];
     }
 }

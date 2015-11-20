@@ -22,11 +22,17 @@ class Container implements Iterator
     protected $httpContextContainer;
 
     /**
+     * @type array
+     */
+    protected $types;
+
+    /**
      * @param HttpContextContainer $httpContextContainer
      */
-    public function __construct(HttpContextContainer $httpContextContainer)
+    public function __construct(HttpContextContainer $httpContextContainer, $types = array())
     {
         $this->httpContextContainer = $httpContextContainer;
+        $this->types = $types;
     }
 
     /**
