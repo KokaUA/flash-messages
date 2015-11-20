@@ -2,21 +2,37 @@
 
 namespace Koka\Flash;
 
+use PHPixie\HTTP\Context\Container as HttpContextContainer;
+
 /**
  * Class Flash
  * @package Koka\Flash
  */
 class Flash extends Container implements FlashInterface
 {
+    /**
+     * @var Types
+     */
+    protected $types;
 
     /**
-     * @param int|array $type
+     * @param HttpContextContainer $httpContextContainer
+     * @param array $types
+     */
+    public function __construct(HttpContextContainer $httpContextContainer, array $types = [])
+    {
+        $this->types = new Types($types);
+        parent::__construct($httpContextContainer);
+    }
+
+    /**
+     * @param string|array $type
      * @return Message|null
      */
     public function pop($type = null)
     {
         $messages = $this->get();
-        if ($type && is_int($type) && isset($messages[$type])) {
+        if ($type && is_string($type) && isset($messages[$type])) {
             foreach ($messages[$type] as $key => $message) {
                 $allMessages[] = $message;
                 unset($messages[$type][$key]);
@@ -43,7 +59,7 @@ class Flash extends Container implements FlashInterface
     }
 
     /**
-     * @param int $type
+     * @param string $type
      * @return bool
      */
     public function has($type = null)
@@ -56,13 +72,13 @@ class Flash extends Container implements FlashInterface
     }
 
     /**
-     * @param $type int
-     * @param $message string
+     * @param string $type
+     * @param string $message
      */
     protected function push($type, $message)
     {
         $messages = $this->get();
-        $message = new Message($type, $message);
+        $message = new Message($type, $message, $this->types);
         $messages[$message->getType(true)][] = $message;
         $this->set($messages);
     }
@@ -73,7 +89,7 @@ class Flash extends Container implements FlashInterface
      */
     public function error($message)
     {
-        $this->push(Message::ERROR, $message);
+        $this->push('error', $message);
         return $this;
     }
 
@@ -83,7 +99,7 @@ class Flash extends Container implements FlashInterface
      */
     public function danger($message)
     {
-        $this->push(Message::DANGER, $message);
+        $this->push('danger', $message);
         return $this;
     }
 
@@ -93,7 +109,7 @@ class Flash extends Container implements FlashInterface
      */
     public function warning($message)
     {
-        $this->push(Message::WARNING, $message);
+        $this->push('warning', $message);
         return $this;
     }
 
@@ -103,7 +119,7 @@ class Flash extends Container implements FlashInterface
      */
     public function notice($message)
     {
-        $this->push(Message::NOTICE, $message);
+        $this->push('notice', $message);
         return $this;
     }
 
@@ -113,7 +129,7 @@ class Flash extends Container implements FlashInterface
      */
     public function alert($message)
     {
-        $this->push(Message::ALERT, $message);
+        $this->push('alert', $message);
         return $this;
     }
 
@@ -123,7 +139,7 @@ class Flash extends Container implements FlashInterface
      */
     public function info($message)
     {
-        $this->push(Message::INFO, $message);
+        $this->push('info', $message);
         return $this;
     }
 
@@ -133,7 +149,7 @@ class Flash extends Container implements FlashInterface
      */
     public function success($message)
     {
-        $this->push(Message::SUCCESS, $message);
+        $this->push('success', $message);
         return $this;
     }
 }

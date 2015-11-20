@@ -28,15 +28,36 @@ class Components extends \PHPixie\BundleFramework\Components
 
     protected function buildFlash()
     {
-        return new \Koka\Flash\Flash($this->builder->context());
+        $types = $this->builder->assets()->configStorage()->get('flash');
+        if (!$types) {
+            $types = [];
+		}
+        return new \Koka\Flash\Flash($this->builder->context(), $types);
     }
 }
 ```
+### Для кастомизации типов создайте файл
+Значения массива можно изменять под свои нужды, главное сохранять ключи.
+Если файл не создавать то по умолчанию тип равен ключу.
+```php
+// /assets/config/flash.php
 
+<?php
+return [
+    'error' => 'alert alert-error',
+    'danger' => 'alert alert-danger',
+    'warning' => 'alert alert-warning',
+    'notice' => 'alert alert-notice',
+    'alert' => 'alert alert-alert',
+    'info' => 'alert alert-info',
+    'success' => 'alert alert-success'
+
+];
+```
 ### Использование
 ```php
 	// /bundles/app/src/Project/App/HTTPProcessor.php
-	
+
 namespace Project\App;
 
 class HTTPProcessor extends \PHPixie\DefaultBundle\Processor\HTTP\Builder
@@ -96,7 +117,7 @@ class Greet extends \PHPixie\DefaultBundle\Processor\HTTP\Actions
 	       <h1>PHPixie 3.0</h1>
 		   <div class="row">
         <?php foreach ($flash as $msg):?>
-                <div class="alert alert-<?=$msg->getType()?>" role='alert'><?=$_($msg)?></div>
+                <div class="<?=$msg->getType()?>" role='alert'><?=$_($msg)?></div>
         <?php endforeach;?>
             </div>
 		<?php $this->childContent();?>

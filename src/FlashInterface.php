@@ -9,7 +9,7 @@ namespace Koka\Flash;
 interface FlashInterface
 {
     /**
-     * @param  int|array $type
+     * @param  string|array $type
      * @return array
      */
     public function pop($type);

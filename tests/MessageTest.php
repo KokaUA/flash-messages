@@ -3,6 +3,7 @@
 namespace Koka\Flash\Tests;
 
 use Koka\Flash\Message;
+use Koka\Flash\Types;
 use PHPixie\Test\Testcase;
 
 class MessageTest extends Testcase
@@ -22,12 +23,17 @@ class MessageTest extends Testcase
 
     public function testGetType()
     {
-        $this->assertSame('info', $this->msg->getType());
-        $this->assertSame(Message::INFO, $this->msg->getType(true));
+        $this->assertSame('alert-info', $this->msg->getType());
+    }
+
+    public function testGetTypeAsKey()
+    {
+        $this->assertSame('info', $this->msg->getType(true));
     }
 
     protected function setUp()
     {
-        $this->msg = new Message(Message::INFO, 'Info message');
+        $types = new Types(['info' => 'alert-info']);
+        $this->msg = new Message('info', 'Info message', $types);
     }
 }

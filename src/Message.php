@@ -9,54 +9,7 @@ namespace Koka\Flash;
 class Message
 {
     /**
-     * @const
-     */
-    const ERROR = 10;
-    /**
-     * @const
-     */
-    const DANGER = 20;
-
-    /**
-     * @const
-     */
-    const WARNING = 30;
-
-    /**
-     * @const
-     */
-    const NOTICE = 40;
-
-    /**
-     * @const
-     */
-    const ALERT = 40;
-
-    /**
-     * @const
-     */
-    const INFO = 50;
-
-    /**
-     * @const
-     */
-    const SUCCESS = 60;
-
-    /**
-     * @var array
-     */
-    protected $types = [
-        'error' => 10,
-        'danger' => 20,
-        'warning' => 30,
-        'notice' => 40,
-        'alert' => 45,
-        'info' => 50,
-        'success' => 60
-    ];
-
-    /**
-     * @var int
+     * @var string
      */
     protected $type;
 
@@ -66,13 +19,20 @@ class Message
     protected $text;
 
     /**
-     * @param int|string $type
-     * @param string $message
+     * @var Types
      */
-    public function __construct($type, $message)
+    protected $types;
+
+    /**
+     * @param string $type
+     * @param string $message
+     * @param Types $types
+     */
+    public function __construct($type, $message, Types $types)
     {
         $this->type = $type;
         $this->text = $message;
+        $this->types = $types;
     }
 
     /**
@@ -92,14 +52,14 @@ class Message
     }
 
     /**
-     * @param bool $asInt
-     * @return int|string
+     * @param bool $asKey
+     * @return string
      */
-    public function getType($asInt = false)
+    public function getType($asKey = false)
     {
-        if ($asInt) {
+        if ($asKey) {
             return $this->type;
         }
-        return array_search($this->type, $this->types);
+        return $this->types->getType($this->type);
     }
 }

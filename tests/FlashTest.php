@@ -13,6 +13,19 @@ class FlashTest extends Testcase
      */
     protected $flash;
 
+    protected function setUp()
+    {
+        $sessionStub = new SessionStub();
+
+        $contextMock = $this->quickMock('\PHPixie\HTTP\Context', ['session']);
+        $this->method($contextMock, 'session', $sessionStub);
+
+        $containerMock = $this->quickMock('\PHPixie\HTTP\Context\Container', ['httpContext']);
+        $this->method($containerMock, 'httpContext', $contextMock);
+
+        $this->flash = new Flash($containerMock, ['danger' => 'alert alert-danger']);
+    }
+
     public function testFlashInstance()
     {
         $this->assertInstanceOf('\Koka\Flash\FlashInterface', $this->flash);
@@ -78,8 +91,8 @@ class FlashTest extends Testcase
     {
         $this->assertFalse($this->flash->has());
         $this->flash->success('Test has message');
-        $this->assertFalse($this->flash->has(Message::INFO));
-        $this->assertTrue($this->flash->has(Message::SUCCESS));
+        $this->assertFalse($this->flash->has('info'));
+        $this->assertTrue($this->flash->has('success'));
     }
 
     public function testPopMessagesWithoutType()
@@ -91,12 +104,12 @@ class FlashTest extends Testcase
         $this->assertNull($this->flash->pop());
     }
 
-    public function testPopMessageWithIntType()
+    public function testPopMessageWithType()
     {
         $this->flash->success('Test pop message');
         $this->flash->success('Test pop message');
         $this->flash->info('Test pop message');
-        $this->assertCount(2, $this->flash->pop(Message::SUCCESS));
+        $this->assertCount(2, $this->flash->pop('success'));
 
     }
 
@@ -107,19 +120,6 @@ class FlashTest extends Testcase
         $this->flash->info('Test pop message');
         $this->flash->info('Test pop message');
         $this->flash->notice('Test pop message');
-        $this->assertCount(3, $this->flash->pop([Message::SUCCESS, Message::NOTICE]));
-    }
-
-    protected function setUp()
-    {
-        $sessionStub = new SessionStub();
-
-        $contextMock = $this->quickMock('\PHPixie\HTTP\Context', ['session']);
-        $this->method($contextMock, 'session', $sessionStub);
-
-        $containerMock = $this->quickMock('\PHPixie\HTTP\Context\Container', ['httpContext']);
-        $this->method($containerMock, 'httpContext', $contextMock);
-
-        $this->flash = new Flash($containerMock);
+        $this->assertCount(3, $this->flash->pop(['success', 'notice']));
     }
 }
